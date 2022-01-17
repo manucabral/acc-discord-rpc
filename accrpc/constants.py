@@ -2,35 +2,44 @@ TITLE = 'Assetto Corsa Competizione - Discord Rich Presence'
 AUTHOR = 'Manuel Cabral'
 GITHUB = 'https://github.com/manucabral'
 VERSION = '0.1'
-
 GAME = 'Assetto Corsa Competizione'
 
+LANGUAGE = {
+    'es': 0,
+    'en': 1
+}
+
+TAGNAME = {
+    'statics': u"Local\\acpmf_static",
+    'graphics': u"Local\\acpmf_graphics"
+}
+
 STATUS = {
-    0: 'En el menú principal',
-    1: 'Viendo una repeticion',
-    2: 'Conduciendo',
-    3: 'En pausa'
+    0: ('En el menú principal', 'In main menu'),
+    1: ('Viendo una repeticion', 'Watching a replay'),
+    2: ('Conduciendo', 'Live'),
+    3: ('En pausa', 'In pause')
 }
 
 RAIN = {
-    0: 'Sin lluvia',
-    1: 'Llovizna',
-    2: 'Lluvia ligera',
-    3: 'Lluvia normal',
-    4: 'Lluvia fuerte',
-    5: 'Tormenta'
+    0: ('Sin lluvia', 'No Rain'),
+    1: ('Llovizna', 'Drizzle'),
+    2: ('Lluvia ligera', 'Light Rain'),
+    3: ('Lluvia', 'Rain'),
+    4: ('Lluvia fuerte', 'Heavy Rain'),
+    5: ('Tormenta', 'Thunderstorm')
 }
 SESSION = {
-    -1: 'Desconocido',
-    0: 'Practica',
-    1: 'Calificatoria',
-    2: 'Carrera',
-    3: 'Hotlap',
-    4: 'Ataque de tiempo',
-    5: 'Drift',
-    6: 'Drag',
-    7: 'Hotstint',
-    8: 'Hotlapsuperpole'
+    -1: ('Desconocido', 'Unknown'),
+    0: ('Practica', 'Practice'),
+    1: ('Calificatoria', 'Qualify'),
+    2: ('Carrera', 'Race'),
+    3: ('Hotlap', 'Hotlap'),
+    4: ('Ataque de tiempo', 'Time Attack'),
+    5: ('Drift', 'Drift'),
+    6: ('Drag', 'Drag'),
+    7: ('Hotstint', 'Hotstint'),
+    8: ('Hotlapsuperpole', 'Hotlapsuperpole')
 }
 
 CAR_MODEL = {
@@ -72,3 +81,31 @@ CAR_MODEL = {
     'porsche_991ii_gt3_cup': 'Porsche9 91 II GT3 Cup 2017',
     'lamborghini_huracan_st': 'Lamborghini Huracan ST 2015'
 }
+
+MSG = [
+    ('Autor', 'Author'),
+    ('Gracias por usar el programa, todavía se encuentra en desarrollo.', 'Thanks for using the program, it is still under development.'),
+    ('Obteniendo el idioma de tu sistema ..', 'Checking your system language ..'),
+    ('Lenguaje detectado:', 'Language detected:'),
+    (f'Esperando ejecución de {GAME} ..', f'Waiting for {GAME} process ..'),
+    (f'Proceso de {GAME} detectado', f'{GAME} process detected'),
+    ('Conectandose con Discord ..', 'Connecting with Discord ..'),
+    ('Conectado con Discord correctamente', 'Discord connected successfully'),
+    ('Un jugador', 'Singleplay'),
+    ('Multijugador', 'Multiplayer'),
+    ('Tiempo', 'Time'),
+    ('Posición', 'Position'),
+    ('En los pits', 'In the pits'),
+    ('Vueltas completadas', 'laps completed'),
+    ('En el menú de configuración', 'In configuration menu')
+]
+
+ERROR = [
+    ('Programa interrumpido por el usuario', 'Program interrupt by user'),
+    ('Lenguaje no encontrado', 'Language not detected'),
+    ('Se excedió el limite de re-conexión con Discord, cerrando programa', 'Discord reconnection limit exceeded, closing program ..'),
+    ('Hubo un error al conectarse con Discord', 'An error occurred when trying to connect'),
+    ('Re-conectandose con Discord en 5s ..', 'Reconnecting with Discord in 5s ..'),
+    (f'{GAME} se ha cerrado, re-conectando ..', f'{GAME} has closed, reconnecting ..'),
+    ('Error al manipular el archivo de registro', 'Error on generating log file')
+]

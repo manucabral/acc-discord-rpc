@@ -1,5 +1,8 @@
 from ctypes import Structure, sizeof, c_int, c_int32, c_float, c_wchar
 
+# Credits to dabde
+
+
 class Statics(Structure):
     _fields_ = [
         ("smVersion", c_wchar * 15),
@@ -50,7 +53,7 @@ class Statics(Structure):
 
 class Physics(Structure):
     _fields_ = [
-("packetId", c_int),
+        ("packetId", c_int),
         ("gas", c_float),
         ("brake", c_float),
         ("fuel", c_float),

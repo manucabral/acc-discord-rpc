@@ -1,14 +1,17 @@
-from colorama import Fore as color, init as colorama_init
 from pypresence import Presence, exceptions as pexceptions
-from subprocess import check_output, PIPE
-from maps import Statics, Graphics, Physics
+from colorama import Fore as color, init as colorama_init
+
+from maps import Statics, Graphics, Physics, Structure
 from ctypes import sizeof
 from mmap import mmap
-from constants import *
+
+from subprocess import check_output, PIPE
 from datetime import datetime
-from os import system
 from time import sleep, time
+from os import system
 from sys import exit
+
+from constants import *
 
 class Core:
     running = False
@@ -17,9 +20,11 @@ class Core:
     start_time = None
     presence = None
     attemps = 0
+    start_time = None
 
-    def __init__(self, client_id: int):
+    def __init__(self, client_id: int, lang: str):
         self.client_id = client_id
+        self.lang = LANGUAGE[lang]
     
     def message(self, msg: str, type: str = 'info', log: bool = False, e:str = None) -> None:
         keys = {
@@ -31,7 +36,7 @@ class Core:
         type = keys[type]
         print(f'{color.WHITE}[{type[0]}{type[1]}{color.WHITE}] {msg}{color.RESET}')
         if log:
-            self.write_log(f'{msg}: {e}')
+            self.write_log(f'{msg} {e if e else None}')
     
     def write_log(self, msg: str) -> None:
         now = datetime.now()
@@ -41,117 +46,131 @@ class Core:
             file.write(f'[{time}] {msg}\n')
             file.close()
         except Exception:
-            self.message('Error al manipular el archivo de registro', type='error')
+            self.message(ERROR[7][self.lang], type='error')
 
-    def acc_is_running(self):
-        return True if check_output(f'wmic process where "name=\'{self.acc_process}\'" get ExecutablePath', universal_newlines=True, stderr=PIPE).strip() else False
+    def check_system_lang(self) -> None:
+        self.message(MSG[2][self.lang], type='loading')
+        lang = check_output('powershell get-uiculture', universal_newlines=True, stderr=PIPE).split('\n')[3][17:].split('           ')
+        system_lang = (lang[0], lang[1][1:])
+        self.lang = LANGUAGE[system_lang[0][:2]]
+        if not lang[0]:
+            self.write_log(ERROR[1][self.lang], type='error', log=True)
+            raise Exception(ERROR[1][self.lang])
+        self.message(f'{MSG[3][self.lang]} {system_lang[1]}', type='success')
     
-    def init_settings(self):
+    def init_settings(self) -> None:
         colorama_init()
         system('cls')
         system('title ' + TITLE)
     
-    def header(self):
+    def header(self) -> None:
         print()
         self.message(TITLE)
-        self.message('Autor: ' + AUTHOR)
+        self.message(f'{MSG[0][self.lang]}: {AUTHOR}')
         self.message('Github: ' + GITHUB)
         self.message('Version: ' + VERSION)
+        self.message(MSG[1][self.lang])
         print()
 
-    def connect_rpc(self):
+    def connect_rpc(self) -> None:
         if self.attemps >= 3:
-            self.message('Se excedió el limite de re-conexión con Discord, cerrando programa', type='error', log=True)
+            self.message(ERROR[2][self.lang], type='error', log=True)
             sleep(5)
             self.close()
         try:
             self.presence = Presence(self.client_id)
             self.presence.connect()
-            self.message('Conectado a Discord correctamente', type='success')
+            self.message(MSG[7][self.lang], type='success')
         except Exception as e:
-            self.message('Hubo un error al conectarse con Discord', type='error', log=True, e=e)
-            self.message('Re-conectandose con Discord en 5s', type='loading')
+            self.message(ERROR[3][self.lang], type='error', log=True, e=e)
+            self.message(ERROR[4][self.lang], type='loading')
             sleep(5)
             self.attemps += 1
             self.connect_rpc()
 
-    def check_acc(self):
-        self.message('Esperando ejecución de ' + GAME, type='loading')
-        while not self.acc_running:
-            self.acc_running = self.acc_is_running()
-        self.message(GAME + ' encontrado', type='success')
-        self.message('Conectandose con Discord', type='loading')
-        self.connect_rpc()
+    def get_statics(self) -> Structure:
+        source = mmap(-1, sizeof(Statics), TAGNAME['statics'])
+        return Statics.from_buffer(source)
     
-    def get_physics(self):
-        source = mmap(-1, sizeof(Physics), u"Local\\acpmf_physics")
-        data = Physics.from_buffer(source)
-        return data
+    def get_graphics(self) -> Structure:
+        source = mmap(-1, sizeof(Graphics), TAGNAME['graphics'])
+        return Graphics.from_buffer(source)
 
-    def get_statics(self):
-        source = mmap(-1, sizeof(Statics), u"Local\\acpmf_static")
-        data = Statics.from_buffer(source)
-        return data
-    
-    def get_graphics(self):
-        source = mmap(-1, sizeof(Graphics), u"Local\\acpmf_graphics")
-        data = Graphics.from_buffer(source)
-        return data
-
-    def presence_handler(self):
+    def presence_handler(self) -> dict:
         graphics = self.get_graphics()
         statics = self.get_statics()
-        physics = self.get_physics()
-        state = None
-        details = STATUS[graphics.AC_STATUS]
+        small_image = small_text = state = None
+        details = STATUS[graphics.AC_STATUS][self.lang]
+        large_text = MSG[7][self.lang] if not statics.isOnline else MSG[8][self.lang]
+        if graphics.AC_STATUS == 0:
+            self.start_time = time()
         if graphics.AC_STATUS == 2:
-            details = f'{SESSION[graphics.AC_SESSION_TYPE]} en {statics.track.capitalize()} ({RAIN[graphics.rainTypes]})'
-            state = f'{CAR_MODEL[statics.carModel]}, {round(physics.speedKmh)} km/h'
+            details = f'{SESSION[graphics.AC_SESSION_TYPE][self.lang]} {"in" if self.lang == 1 else "en"} {statics.track.capitalize()} ({RAIN[graphics.rainTypes][self.lang]})'
+            state = f'{MSG[10][self.lang]} {graphics.currentTime}, {MSG[11][self.lang]} {graphics.position}/{graphics.activeCars}'
+            small_image = 'logo'
+            small_text = CAR_MODEL[statics.carModel]
             if graphics.isInPit:
-                state += '(En los pits)'
+                state += MSG[12][self.lang]
         elif graphics.AC_STATUS == 3:
-            details += f', {graphics.completedLaps} vueltas hechas'
+            details += f', {graphics.completedLaps} {MSG[13][self.lang]}'
+        if graphics.isSetupMenuVisible:
+            state = {MSG[14][self.lang]}
         data = {
             'details': details,
             'state': state,
-            'start': self.start_time
+            'start': self.start_time,
+            'large_image': 'logo',
+            'large_text': large_text,
+            'small_image': small_image,
+            'small_text': small_text
         }
         return data
 
-    def update_presence(self):
+    def check_acc(self) -> None:
+        self.message(MSG[4][self.lang], type='loading')
+        while not self.acc_running:
+            self.acc_running = self.acc_is_running()
+        self.message(MSG[5][self.lang], type='success')
+        self.message(MSG[6][self.lang], type='loading')
+        self.connect_rpc()
+
+    def update_presence(self) -> None:
         data = self.presence_handler()
         if not data:
             data = {
                 'details': 'Offline',
-                'start': self.start_time
             }
-            
         self.presence.update(**data)
-        
-    def close(self):
-        self.running = False
-        exit()
 
-    def main(self):
+    def acc_is_running(self) -> bool:
+        return True if check_output(f'wmic process where "name=\'{self.acc_process}\'" get ExecutablePath', universal_newlines=True, stderr=PIPE).strip() else False
+    
+    def main(self) -> None:
         self.start_time = time()
         while self.acc_running:
             self.acc_running =  self.acc_is_running()
             self.update_presence()
             sleep(15)
-        self.message(f'{GAME} se ha cerrado, re-conectando', type='info')
+        self.message(ERROR[5][self.lang], type='error')
         self.presence.clear()
-        self.presence.close()
-        self.check_acc()
+        self.run()
 
-    def run(self):
+    def run(self) -> None:
         try:
-            self.init_settings()
-            self.header()
+            if not self.running:
+                self.init_settings()
+                self.header()
+                self.check_system_lang()
+                self.running = True
             self.check_acc()
             self.main()
         except KeyboardInterrupt:
-            self.message('Programa interrumpido por el usuario')
+            self.message(ERROR[6][self.lang])
+    
+    def close(self) -> None:
+        self.running = False
+        exit()
         
 if __name__ == '__main__':
-    accrpc = Core('')
+    accrpc = Core(932615576176709643, 'en')
     accrpc.run()
