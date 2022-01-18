@@ -13,9 +13,11 @@
 - Show if playing multiplayer or singleplayer
 - Show current position and car model
 
-## Usage
-1. Download the last version from [here](https://github.com/manucabral/acc-discord-rpc/releases)
-3. Open `Assetto Corsa Competizione RPC.exe`
+## Installation
+1. Go to [releases](https://github.com/manucabral/acc-discord-rpc/releases)
+2. Download **ACC.RPC.zip**
+3. Extract and run `Assetto Corsa Competizione RPC.exe`
+4. Enjoy :D
 
 ## Important
 Requires Discord running and `Display current activity` activated, if the rich presence doesn't work you can restart discord and try again.
