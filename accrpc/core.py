@@ -1,5 +1,6 @@
 from pypresence import Presence, exceptions as pexceptions
 from colorama import Fore as color, init as colorama_init
+from requests import get
 
 from maps import Statics, Graphics, Physics, Structure
 from ctypes import sizeof
@@ -30,6 +31,7 @@ class Core:
         keys = {
             'success': (color.GREEN, 'V'),
             'error': (color.RED, 'X'),
+            'warning': (color.LIGHTYELLOW_EX, '!'),
             'info': (color.LIGHTCYAN_EX, '>'),
             'loading': (color.LIGHTBLUE_EX, '~')
         }
@@ -42,7 +44,7 @@ class Core:
         now = datetime.now()
         time = now.strftime("%d/%m/%Y %H:%M:%S")
         try:
-            file = open('log.txt', 'a', encoding='utf-8')
+            file = open('log.txt', 'a+', encoding='utf-8')
             file.write(f'[{time}] {msg}\n')
             file.close()
         except Exception:
@@ -58,6 +60,22 @@ class Core:
             raise Exception(ERROR[1][self.lang])
         self.message(f'{MSG[3][self.lang]} {system_lang[1]}', type='success')
     
+    def check_updates(self):
+        self.message(MSG[15][self.lang], type='loading')
+        res = get(REPO_URL)
+        try:
+            res.raise_for_status()
+        except rexceptions.HTTPError as err:
+            self.message(str(err), type='error')
+            return
+        versions = []
+        for key in res.json():
+            versions.append(key['tag_name'])
+        if versions[0] != VERSION:
+            self.message(f'{MSG[16][self.lang]}: {versions[0]}', type='warning')
+        else:
+            self.message(MSG[17][self.lang], type='success')
+
     def init_settings(self) -> None:
         colorama_init()
         system('cls')
@@ -101,7 +119,7 @@ class Core:
         statics = self.get_statics()
         small_image = small_text = state = None
         details = STATUS[graphics.AC_STATUS][self.lang]
-        large_text = MSG[7][self.lang] if not statics.isOnline else MSG[8][self.lang]
+        large_text = MSG[8][self.lang] if not statics.isOnline else MSG[9][self.lang]
         if graphics.AC_STATUS == 0:
             self.start_time = time()
         if graphics.AC_STATUS == 2:
@@ -161,11 +179,14 @@ class Core:
                 self.init_settings()
                 self.header()
                 self.check_system_lang()
+                self.check_updates()
                 self.running = True
             self.check_acc()
             self.main()
         except KeyboardInterrupt:
-            self.message(ERROR[6][self.lang])
+            self.message(ERROR[0][self.lang])
+            sleep(3)
+            self.close()
     
     def close(self) -> None:
         self.running = False

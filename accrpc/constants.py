@@ -1,6 +1,7 @@
 TITLE = 'Assetto Corsa Competizione - Discord Rich Presence'
 AUTHOR = 'Manuel Cabral'
 GITHUB = 'https://github.com/manucabral'
+REPO_URL = "https://api.github.com/repos/manucabral/acc-discord-rpc/releases"
 VERSION = '0.1'
 GAME = 'Assetto Corsa Competizione'
 
@@ -97,7 +98,10 @@ MSG = [
     ('Posición', 'Position'),
     ('En los pits', 'In the pits'),
     ('Vueltas completadas', 'laps completed'),
-    ('En el menú de configuración', 'In configuration menu')
+    ('En el menú de configuración', 'In configuration menu'),
+    ('Buscando actualizaciones ..', 'Checking updates ..'),
+    ('Nueva actualización disponible, por favor actualiza a la versión', 'New update is available, please update to version'),
+    ('Actualizado', 'Up to date')
 ]
 
 ERROR = [
