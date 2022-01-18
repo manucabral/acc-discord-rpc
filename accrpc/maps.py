@@ -1,7 +1,8 @@
 from ctypes import Structure, sizeof, c_int, c_int32, c_float, c_wchar
 
-# Credits to dabde
-
+# Credits
+# https://github.com/dabde/acc_shared_mem_access_python
+# https://github.com/rrennoir/PyAccSharedMemory
 
 class Statics(Structure):
     _fields_ = [
