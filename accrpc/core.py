@@ -125,8 +125,8 @@ class Core:
         if graphics.AC_STATUS == 2:
             details = f'{SESSION[graphics.AC_SESSION_TYPE][self.lang]} {"in" if self.lang == 1 else "en"} {statics.track.capitalize()} ({RAIN[graphics.rainTypes][self.lang]})'
             state = f'{MSG[10][self.lang]} {graphics.currentTime}, {MSG[11][self.lang]} {graphics.position}/{graphics.activeCars}'
-            small_image = 'logo'
-            small_text = CAR_MODEL[statics.carModel]
+            small_image = CAR_MODEL[statics.carModel][1]
+            small_text = CAR_MODEL[statics.carModel][0]
             if graphics.isInPit:
                 state += MSG[12][self.lang]
         elif graphics.AC_STATUS == 3:
@@ -193,5 +193,5 @@ class Core:
         exit()
         
 if __name__ == '__main__':
-    accrpc = Core('', 'en')
+    accrpc = Core(932615576176709643, 'en')
     accrpc.run()
