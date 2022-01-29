@@ -193,5 +193,5 @@ class Core:
         exit()
         
 if __name__ == '__main__':
-    accrpc = Core(932615576176709643, 'en')
+    accrpc = Core(1, 'en')
     accrpc.run()
