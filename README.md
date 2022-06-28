@@ -9,7 +9,7 @@
 ## ⏬Download
 The lastest release is available [here](https://github.com/manucabral/acc-discord-rpc/releases)
 
-## ✨Features✨
+## ✨Features
 - Show current session type, track and rain status
 - Show game panel status (main menu, configuration or pause)
 - Show laps completed and if car is pitting
