@@ -3,24 +3,23 @@
 </p>
 
 <p align="center">
-   A simple Assetto Corsa Competizione Rich Presence client. This app only works in Windows.
+   A simple Assetto Corsa Competizione Rich Presence client. 
 </p>
 
-## Features
+## ⏬Download
+The lastest release is available [here](https://github.com/manucabral/acc-discord-rpc/releases)
+
+## ✨Features✨
 - Show current session type, track and rain status
 - Show game panel status (main menu, configuration or pause)
 - Show laps completed and if car is pitting
 - Show if playing multiplayer or singleplayer
 - Show current position and car model
 
-## Installation
-1. Go to [releases](https://github.com/manucabral/acc-discord-rpc/releases)
-2. Download **ACC.RPC.zip**
-3. Extract and run `Assetto Corsa Competizione RPC.exe`
-4. Enjoy :D
-
-## Important
-Requires Discord running and `Display current activity` activated, if the rich presence doesn't work you can restart discord and try again.
+## 📝Notes
+- Requires discord running and `Display current activity` enabled
+- If the rich presence doesn't work you can restart discord and try again
+- This app only works in Windows.
 
 ## Credits
 - [pypresence](https://github.com/qwertyquerty/pypresence)
