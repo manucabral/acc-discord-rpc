@@ -79,6 +79,7 @@ CAR_MODEL = {
     'audi_r8_gt4': ('Audi R8 LMS GT4 2016', 'audi'),
     'bmw_m2_cs_racing': ('BMW M2 CS Racing 2020' , 'bmw'),
     'bmw_m4_gt4': ('BMW M4 GT4 2018', 'bmw'),
+    "bmw_m4_gt3": ('BMW M4 GT3 2022', 'bmw'),
     'chevrolet_camaro_gt4r': ('Chevrolet Camaro GT4 R 2017', 'chevrolet'),
     'ginetta_g55_gt4': ('Ginetta G55 GT4 2012', 'ginetta'),
     'ktm_xbow_gt4': ('Ktm Xbow GT4 2016', 'ktm'),
