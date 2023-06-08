@@ -1,0 +1,11 @@
+certifi==2023.5.7
+charset-normalizer==3.1.0
+colorama==0.4.6
+cx-Freeze==6.15.1
+cx-Logging==3.1.0
+idna==3.4
+lief==0.13.1
+maps==5.1.1
+pypresence==4.2.1
+requests==2.31.0
+urllib3==2.0.3
